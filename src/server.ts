@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import testRoute from './routes/TestRoute';
+import authRoute from "./routes/AuthRoute";
 
 dotenv.config();
 const app = express();
@@ -11,7 +12,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
-app.use('/api', [testRoute]);
+app.use('/api', testRoute);
+app.use('/api/auth', authRoute)
 
 const PORT = process.env.NODE_PUBLIC_PORT;
 const DB_URL = process.env.NODE_PUBLIC_DB_URL as string;
