@@ -1,4 +1,10 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+
+interface TeamDocument extends Document {
+	name: string;
+	admin: mongoose.Schema.Types.ObjectId;
+	users: mongoose.Schema.Types.ObjectId[];
+}
 
 const Schema = mongoose.Schema;
 const TeamSchema = new Schema(
