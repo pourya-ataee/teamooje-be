@@ -5,7 +5,6 @@ export interface UserDocument extends Document {
 	name: string;
 	email: string;
 	password: string;
-	token?: string;
 	teams: mongoose.Schema.Types.ObjectId;
 }
 
@@ -15,7 +14,6 @@ const UserSchema = new Schema<UserDocument>(
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
-		token: { type: String },
 		teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
 	},
 	{ timestamps: true }

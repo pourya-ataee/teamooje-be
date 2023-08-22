@@ -1,11 +1,21 @@
 {
-  "compilerOptions": {
-    "target": "es2016",
-    "lib": ["es6"],
-    "module": "commonjs",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true
-  }
+	"compilerOptions": {
+		"target": "ES2022",
+		"lib": ["ES6", "DOM", "ESNext"],
+		// "module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"moduleResolution": "node",
+		"noEmitHelpers": true,
+		"outDir": "dist",
+		"allowJs": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"importHelpers": true,
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
 }

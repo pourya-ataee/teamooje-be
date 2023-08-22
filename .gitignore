@@ -16,3 +16,6 @@ benchmarks/graphs
 
 # Environment
 .env
+
+dist
+.vscode

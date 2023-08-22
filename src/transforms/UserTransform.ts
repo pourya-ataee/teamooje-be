@@ -4,15 +4,10 @@ import { UserDocument } from '../models/UserModel';
 
 dotenv.config();
 
-export const loginTransform = (item: UserDocument) => {
-	let token: string = !!item.token ? item.token : jwt.sign({ user_id: item._id }, process.env.NODE_PRIVATE_SECRET as string, { expiresIn: '110h' });
+export const authTransform = (item: UserDocument) => {
 	return {
 		name: item.name,
 		email: item.email,
-		token,
+		token: jwt.sign({ user_id: item._id }, process.env.NODE_PRIVATE_SECRET as string, { expiresIn: '110h' }),
 	};
 };
-
-export const registerTransform = (item: UserDocument) => {
-  
-}
