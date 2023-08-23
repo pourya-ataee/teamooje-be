@@ -1,24 +1,15 @@
-import express from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import testRoute from './routes/TestRoute';
-import authRoute from "./routes/AuthRoute";
+import { Sequelize } from 'sequelize';
 
-dotenv.config();
-const app = express();
+const sequelize = new Sequelize('teamooje', 'root', '', {
+	host: 'localhost',
+	dialect: 'mysql',
+});
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
-
-app.use('/api', testRoute);
-app.use('/api/auth', authRoute)
-
-const PORT = process.env.NODE_PUBLIC_PORT;
-const DB_URL = process.env.NODE_PUBLIC_DB_URL as string;
-
-mongoose
-	.connect(DB_URL)
-	.then(() => app.listen(PORT, () => console.log(`Server is running on port ${PORT}`)))
-	.catch((error) => console.log(error.message));
+const test = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+}

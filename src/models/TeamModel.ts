@@ -1,19 +1,30 @@
-import mongoose, { Document } from 'mongoose';
+import { Sequelize, DataTypes, Model } from 'sequelize';
+import { User } from './UserModel';
+const sequelize = new Sequelize('sqlite::memory:');
 
-interface TeamDocument extends Document {
-	name: string;
-	admin: mongoose.Schema.Types.ObjectId;
-	users: mongoose.Schema.Types.ObjectId[];
+interface TeamAttributes extends Model {
+	username: string;
+	email: string;
+	password: string;
 }
 
-const Schema = mongoose.Schema;
-const TeamSchema = new Schema(
-	{
-		name: { type: String, required: true, unique: true },
-		admin: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-		users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+const Team = sequelize.define<TeamAttributes>('Team', {
+	name: {
+		type: DataTypes.STRING,
+		allowNull: false,
 	},
-	{ timestamps: true }
-);
+	users: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		unique: true,
+	},
+	password: {
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
+});
 
-export default mongoose.model('Team', TeamSchema);
+Team.belongsToMany(User, { through: 'UserTeams' });
+Team.belongsTo(User, { as: 'admin', foreignKey: 'adminId' });
+
+export { Team };
