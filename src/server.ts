@@ -1,15 +1,28 @@
-import { Sequelize } from 'sequelize';
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import db from './models';
+import testRoute from './routes/TestRoute';
+import authRoute from './routes/AuthRoute';
 
-const sequelize = new Sequelize('teamooje', 'root', '', {
-	host: 'localhost',
-	dialect: 'mysql',
-});
+dotenv.config();
+const app = express();
 
-const test = async () => {
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-}
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+
+app.use('/api', testRoute);
+app.use('/api/auth', authRoute);
+
+const PORT = process.env.NODE_PUBLIC_PORT;
+
+db.sequelize
+	.sync({ force: true })
+	.then(() => {
+		console.log('Synced db.');
+		app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+	})
+	.catch((err) => {
+		console.log('Failed to sync db: ' + err.message);
+	});

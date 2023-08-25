@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"target": "ES2022",
 		"lib": ["ES6", "DOM", "ESNext"],
-		// "module": "CommonJS",
+		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
 		"moduleResolution": "node",
 		"noEmitHelpers": true,

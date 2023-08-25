@@ -1,9 +1,9 @@
-import { Sequelize, DataTypes, Model } from 'sequelize';
+import { DataTypes, Model } from 'sequelize';
+import sequelize from '../config';
+import Team from './TeamModel';
 import bcrypt from 'bcrypt';
-import { Team } from './TeamModel';
-const sequelize = new Sequelize('sqlite::memory:');
 
-interface UserAttributes extends Model {
+export interface UserAttributes extends Model {
 	username: string;
 	email: string;
 	password: string;
@@ -24,17 +24,19 @@ const User = sequelize.define<UserAttributes>(
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				is: /^[0-9a-f]{64}$/i,
+			},
 		},
 	},
 	{
+		tableName: 'tpdb_users',
 		timestamps: true,
 		underscored: true,
 		createdAt: 'created_at',
 		updatedAt: 'updated_at',
 	}
 );
-
-User.belongsToMany(Team, { through: 'UserTeams' });
 
 User.beforeCreate(async (user) => {
 	const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -48,4 +50,4 @@ User.beforeUpdate(async (user) => {
 	}
 });
 
-export { User };
+export default User;
