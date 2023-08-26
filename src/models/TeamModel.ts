@@ -1,11 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
-import User from './UserModel';
 
 interface TeamAttributes extends Model {
-	username: string;
-	email: string;
-	password: string;
+	id: number;
+	name: string;
 }
 
 const Team = sequelize.define<TeamAttributes>(
@@ -14,6 +12,14 @@ const Team = sequelize.define<TeamAttributes>(
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				notEmpty: {
+					msg: 'وارد کردن نام تیم الزامیست',
+				},
+				notNull: {
+					msg: 'وارد کردن نام تیم الزامیست',
+				},
+			},
 		},
 	},
 	{

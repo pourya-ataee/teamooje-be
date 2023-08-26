@@ -1,9 +1,9 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
-import Team from './TeamModel';
 import bcrypt from 'bcrypt';
 
 export interface UserAttributes extends Model {
+	id: number;
 	username: string;
 	email: string;
 	password: string;
@@ -15,17 +15,41 @@ const User = sequelize.define<UserAttributes>(
 		username: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			validate: {
+				notEmpty: {
+					msg: 'وارد کردن نام و نام خانوادگی الزامیست',
+				},
+				notNull: {
+					msg: 'وارد کردن نام و نام خانوادگی الزامیست',
+				},
+			},
 		},
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			unique: true,
+			validate: {
+				notEmpty: {
+					msg: 'وارد کردن ایمیل الزامیست',
+				},
+				notNull: {
+					msg: 'وارد کردن ایمیل الزامیست',
+				},
+				isEmail: {
+					msg: 'ایمیل وارد شده صحیح نمی‌باشد',
+				},
+			},
 		},
 		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
 			validate: {
-				is: /^[0-9a-f]{64}$/i,
+				notEmpty: {
+					msg: 'وارد کردن رمزعبور الزامیست',
+				},
+				notNull: {
+					msg: 'وارد کردن رمزعبور الزامیست',
+				},
 			},
 		},
 	},

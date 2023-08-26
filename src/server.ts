@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import db from './models';
 import testRoute from './routes/TestRoute';
 import authRoute from './routes/AuthRoute';
+import teamRoute from './routes/TeamRoute';
+import { authMiddleware } from './middleware/Authentication';
 
 dotenv.config();
 const app = express();
@@ -14,6 +16,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 app.use('/api', testRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/team', authMiddleware, teamRoute);
 
 const PORT = process.env.NODE_PUBLIC_PORT;
 
