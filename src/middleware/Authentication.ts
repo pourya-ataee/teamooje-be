@@ -2,10 +2,12 @@ import { NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { resModel } from '../utils/utils';
+import db from '../models';
+import { UserAttributes } from '../models/UserModel';
 
 dotenv.config();
 
-export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 	try {
 		const token = req.headers.authorization?.split(' ')[1];
 		if (!token) {
@@ -16,9 +18,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 				})
 			);
 		}
-		const decodedToken = jwt.verify(token, process.env.NODE_PRIVATE_SECRET as string) as { user_id: number };
-		const userId = decodedToken.user_id;
-		if (req.body.user_id && req.body.user_id !== userId) {
+		const decodedToken = jwt.verify(token, process.env.NODE_PRIVATE_SECRET as string) as { userId: number };
+		const user = await db.user.findOne({ where: { id: decodedToken.userId } });
+		if (!user) {
 			return res.status(401).json(
 				resModel({
 					success: false,
@@ -26,7 +28,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 				})
 			);
 		}
-		req.body.user_id = userId;
+		req.user = user as UserAttributes;
 		next();
 	} catch {
 		res.status(401).json(

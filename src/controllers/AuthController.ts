@@ -6,8 +6,8 @@ import { authTransform } from '../transforms/UserTransform';
 
 export const login = async (req: Request, res: Response) => {
 	try {
-        if(!req.body.email || !req.body.password) {
-            return res.status(500).json(
+		if (!req.body.email || !req.body.password) {
+			return res.status(500).json(
 				resModel({
 					success: false,
 					error: {
@@ -16,7 +16,7 @@ export const login = async (req: Request, res: Response) => {
 					},
 				})
 			);
-        }
+		}
 		const user = await db.user.findOne({ where: { email: req.body.email } });
 		if (!user) {
 			return res.status(422).json(
