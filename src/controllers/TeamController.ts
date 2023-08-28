@@ -8,9 +8,10 @@ export const createTeam = async (req: Request, res: Response) => {
 	try {
 		const newTeam = await db.team.create({
 			name: req.body.name,
-			admin: req.user?.id,
-			users: req.user?.id.toString(),
+			description: req.body.description,
+			admin_id: req.user?.id,
 		});
+		newTeam.addUser(req.user as UserAttributes);
 		return res.status(200).json(
 			resModel({
 				data: newTeam.name,
@@ -39,31 +40,31 @@ export const addUser = async (req: Request, res: Response) => {
 				})
 			);
 		}
-		const user = (await db.user.findOne({ where: { email: req.body.email } })) as UserAttributes;
-		if (!user) {
-			return res.status(404).json(
+		if (team.admin_id === req.user?.id) {
+			const user = (await db.user.findOne({ where: { email: req.body.email } })) as UserAttributes;
+			if (!user) {
+				return res.status(404).json(
+					resModel({
+						success: false,
+						error: { email: 'کاربری با این ایمیل یافت نشد' },
+					})
+				);
+			}
+			team.addUser(user);
+			return res.status(200).json(
+				resModel({
+					success: true,
+					successMessage: 'کاربر با موفقیت اضافه شد',
+				})
+			);
+		} else {
+			return res.status(403).json(
 				resModel({
 					success: false,
-					error: { email: 'کاربری با این ایمیل یافت نشد' },
+					error: 'شما به این تیم دسترسی ندارید',
 				})
 			);
 		}
-		if (team.users?.split(',')?.includes(user.id.toString())) {
-			return res.status(400).json(
-				resModel({
-					success: false,
-					error: { email: 'کاربر در حال حاضر عضوی از تیم است' },
-				})
-			);
-		}
-		team.users = !!team.users ? team.users + `,${user.id}` : `${user.id}`;
-		await team.save();
-		return res.status(200).json(
-			resModel({
-				success: true,
-				successMessage: 'کاربر با موفقیت اضافه شد',
-			})
-		);
 	} catch (err) {
 		return res.status(500).json(
 			resModel({
@@ -85,34 +86,31 @@ export const deleteUser = async (req: Request, res: Response) => {
 				})
 			);
 		}
-		const user = (await db.user.findOne({ where: { email: req.params.user } })) as UserAttributes;
-		if (!user) {
-			return res.status(404).json(
-				resModel({
-					success: false,
-					error: { email: 'کاربری با این ایمیل یافت نشد' },
-				})
-			);
-		}
-		if (!team.users?.split(',')?.includes(user.id.toString())) {
+		if (team.admin_id === req.user?.id) {
+			const user = (await db.user.findOne({ where: { email: req.params.user } })) as UserAttributes;
+			if (!user) {
+				return res.status(404).json(
+					resModel({
+						success: false,
+						error: { email: 'کاربری با این ایمیل یافت نشد' },
+					})
+				);
+			}
+			team.removeUser(user);
 			return res.status(200).json(
 				resModel({
 					success: true,
 					successMessage: 'کاربر از تیم حذف شد',
 				})
 			);
+		} else {
+			return res.status(403).json(
+				resModel({
+					success: false,
+					error: 'شما به این تیم دسترسی ندارید',
+				})
+			);
 		}
-		team.users = team.users
-			?.split(',')
-			.filter((e) => e !== user.id.toString())
-			.join(',');
-		await team.save();
-		return res.status(200).json(
-			resModel({
-				success: true,
-				successMessage: 'کاربر از تیم حذف شد',
-			})
-		);
 	} catch (err) {
 		return res.status(500).json(
 			resModel({
