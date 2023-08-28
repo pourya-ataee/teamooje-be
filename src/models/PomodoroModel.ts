@@ -2,24 +2,35 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
 
 export interface PomodoroAttributes extends Model {
-	start_time: Date;
-	end_time: Date;
+	end_date: Date;
+	counting: boolean;
 	duration: number;
+	remaining: number;
+	state: 'work' | 'rest';
+    user_id: number;
 }
 
 const Pomodoro = sequelize.define<PomodoroAttributes>(
 	'Pomodoro',
 	{
-		start_time: {
-			type: DataTypes.DATE,
-			allowNull: false,
-		},
-		end_time: {
-			type: DataTypes.DATE,
+		end_date: { 
+            type: DataTypes.DATE, 
+            allowNull: false 
+        },
+		counting: {
+			type: DataTypes.BOOLEAN,
 			allowNull: false,
 		},
 		duration: {
 			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		remaining: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+		},
+		state: {
+			type: DataTypes.STRING,
 			allowNull: false,
 		},
 	},

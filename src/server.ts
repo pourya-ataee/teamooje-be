@@ -21,7 +21,7 @@ app.use('/api/team', authMiddleware, teamRoute);
 const PORT = process.env.NODE_PUBLIC_PORT;
 
 db.sequelize
-	.sync({ force: true })
+	.sync()
 	.then(() => {
 		console.log('Synced db.');
 		app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

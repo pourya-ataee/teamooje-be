@@ -1,12 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
-import { UserAttributes } from './UserModel';
+import User, { UserAttributes } from './UserModel';
 
 export interface TeamAttributes extends Model {
 	id: number;
 	name: string;
 	admin_id: number;
 	description?: string;
+	admin: UserAttributes;
+	users: UserAttributes;
 	removeUser: (e: UserAttributes) => void;
 	addUser: (e: UserAttributes, a?: { through: { admin_id: number } }) => void;
 }
@@ -29,6 +31,14 @@ const Team = sequelize.define<TeamAttributes>(
 		description: {
 			type: DataTypes.STRING,
 			allowNull: true,
+		},
+		admin_id: {
+			type: DataTypes.INTEGER,
+			references: {
+				model: User,
+				key: 'id',
+			},
+			allowNull: false,
 		},
 	},
 	{

@@ -120,3 +120,37 @@ export const deleteUser = async (req: Request, res: Response) => {
 		);
 	}
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+	try {
+		// if (!team) {
+		// 	return res.status(404).json(
+		// 		resModel({
+		// 			success: false,
+		// 			error: 'تیم مورد نظر یافت نشد',
+		// 		})
+		// 	);
+		// }
+        const team = (await db.team.findOne({
+			where: { id: req.params.id },
+			include: [{ model: db.user, as: 'admin' }, { model: db.user, as: 'users' }],
+		})) as TeamAttributes;
+        
+		return res.status(200).json(
+			resModel({
+				success: true,
+				data: {
+					admin: team.admin,
+					user: team.users,
+				},
+			})
+		);
+	} catch (err) {
+		return res.status(500).json(
+			resModel({
+				success: false,
+				error: errObj(err),
+			})
+		);
+	}
+};
