@@ -17,6 +17,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use('/api', testRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/team', authMiddleware, teamRoute);
+app.use('/api/pomodoro', authMiddleware, teamRoute);
 
 const PORT = process.env.NODE_PUBLIC_PORT;
 

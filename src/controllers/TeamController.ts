@@ -3,6 +3,7 @@ import db from '../models';
 import { errObj, resModel } from '../utils/utils';
 import { TeamAttributes } from '../models/TeamModel';
 import { UserAttributes } from '../models/UserModel';
+import { userTransform, usersTransform } from '../transforms/UserTransform';
 
 export const createTeam = async (req: Request, res: Response) => {
 	try {
@@ -123,25 +124,39 @@ export const deleteUser = async (req: Request, res: Response) => {
 
 export const getUsers = async (req: Request, res: Response) => {
 	try {
-		// if (!team) {
-		// 	return res.status(404).json(
-		// 		resModel({
-		// 			success: false,
-		// 			error: 'تیم مورد نظر یافت نشد',
-		// 		})
-		// 	);
-		// }
-        const team = (await db.team.findOne({
+		const team = (await db.team.findOne({
 			where: { id: req.params.id },
-			include: [{ model: db.user, as: 'admin' }, { model: db.user, as: 'users' }],
+			include: [
+				{
+					model: db.user,
+					as: 'admin',
+				},
+				{
+					model: db.user,
+					as: 'users',
+					include: {
+						model: db.pomodoro,
+						as: 'pomodoro',
+					},
+				},
+			],
 		})) as TeamAttributes;
-        
+
+		if (!team) {
+			return res.status(404).json(
+				resModel({
+					success: false,
+					error: 'تیم مورد نظر یافت نشد',
+				})
+			);
+		}
+
 		return res.status(200).json(
 			resModel({
 				success: true,
 				data: {
-					admin: team.admin,
-					user: team.users,
+					admin: userTransform(team.admin),
+					users: usersTransform(team.users),
 				},
 			})
 		);

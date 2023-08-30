@@ -8,7 +8,7 @@ export interface TeamAttributes extends Model {
 	admin_id: number;
 	description?: string;
 	admin: UserAttributes;
-	users: UserAttributes;
+	users: UserAttributes[];
 	removeUser: (e: UserAttributes) => void;
 	addUser: (e: UserAttributes, a?: { through: { admin_id: number } }) => void;
 }

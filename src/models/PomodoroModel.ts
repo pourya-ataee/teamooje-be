@@ -13,10 +13,10 @@ export interface PomodoroAttributes extends Model {
 const Pomodoro = sequelize.define<PomodoroAttributes>(
 	'Pomodoro',
 	{
-		end_date: { 
-            type: DataTypes.DATE, 
-            allowNull: false 
-        },
+		end_date: {
+			type: DataTypes.DATE,
+			allowNull: false,
+		},
 		counting: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
@@ -24,6 +24,14 @@ const Pomodoro = sequelize.define<PomodoroAttributes>(
 		duration: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
+			validate: {
+				notEmpty: {
+					msg: 'وارد کردن مدت زمان الزامیست',
+				},
+				notNull: {
+					msg: 'وارد کردن مدت زمان الزامیست',
+				},
+			},
 		},
 		remaining: {
 			type: DataTypes.INTEGER,

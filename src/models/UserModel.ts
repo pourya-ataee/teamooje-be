@@ -1,12 +1,14 @@
 import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
 import bcrypt from 'bcrypt';
+import { PomodoroAttributes } from './PomodoroModel';
 
 export interface UserAttributes extends Model {
 	id: number;
 	username: string;
 	email: string;
 	password: string;
+    pomodoro: PomodoroAttributes;
 }
 
 const User = sequelize.define<UserAttributes>(

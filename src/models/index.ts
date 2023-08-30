@@ -4,12 +4,14 @@ import Team from './TeamModel';
 import User from './UserModel';
 import UserTeams from './UserTeamsModel';
 
-User.belongsToMany(Team, { through: 'tpdb_user_teams' });
-Team.belongsToMany(User, { through: 'tpdb_user_teams' });
-Team.belongsTo(User, { as: 'admin', foreignKey: 'admin_id' });
+// Team associations
+User.belongsToMany(Team, { through: 'tpdb_user_teams', as: 'teams' });
+Team.belongsToMany(User, { through: 'tpdb_user_teams', as: 'users' });
+Team.belongsTo(User, { foreignKey: 'admin_id', as: 'admin' });
 
-User.hasOne(Pomodoro);
-Pomodoro.belongsTo(User);
+// Pomodoro associations
+User.hasOne(Pomodoro, { as: 'pomodoro' });
+Pomodoro.belongsTo(User, { as: 'user' });
 
 const db = {
 	sequelize: sequelize,

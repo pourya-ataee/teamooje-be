@@ -11,3 +11,21 @@ export const authTransform = (item: UserAttributes) => {
 		token: jwt.sign({ userId: item.id }, process.env.NODE_PRIVATE_SECRET as string, { expiresIn: '168h' }),
 	};
 };
+
+export const userTransform = (item: UserAttributes) => {
+	return {
+		id: item.id,
+		username: item.username,
+		email: item.email,
+	};
+};
+
+export const usersTransform = (items: UserAttributes[]) => {
+	return items.map((user) => {
+		return {
+			id: user.id,
+			username: user.username,
+			email: user.email,
+		};
+	});
+};
