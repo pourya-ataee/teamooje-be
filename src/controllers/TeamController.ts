@@ -134,10 +134,10 @@ export const getUsers = async (req: Request, res: Response) => {
 				{
 					model: db.user,
 					as: 'users',
-					include: {
+					include: [{
 						model: db.pomodoro,
 						as: 'pomodoro',
-					},
+					}],
 				},
 			],
 		})) as TeamAttributes;

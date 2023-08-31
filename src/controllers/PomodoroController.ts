@@ -4,7 +4,7 @@ import { errObj, resModel } from '../utils/utils';
 
 export const changeStatus = async (req: Request, res: Response) => {
 	try {
-		const pomodoro = await db.pomodoro.findOrCreate({
+		await db.pomodoro.findOrCreate({
 			where: { user_id: req.user?.id },
 			defaults: {
 				end_date: req.body.end_date,
@@ -15,6 +15,11 @@ export const changeStatus = async (req: Request, res: Response) => {
 				user_id: req.user?.id,
 			},
 		});
+		return res.status(200).json(
+			resModel({
+				success: true,
+			})
+		);
 	} catch (err) {
 		return res.status(500).json(
 			resModel({

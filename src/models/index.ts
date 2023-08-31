@@ -10,8 +10,8 @@ Team.belongsToMany(User, { through: 'tpdb_user_teams', as: 'users' });
 Team.belongsTo(User, { foreignKey: 'admin_id', as: 'admin' });
 
 // Pomodoro associations
-User.hasOne(Pomodoro, { as: 'pomodoro' });
-Pomodoro.belongsTo(User, { as: 'user' });
+User.hasOne(Pomodoro, { foreignKey: 'pomodoro_id', as: 'pomodoro' });
+Pomodoro.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
 const db = {
 	sequelize: sequelize,

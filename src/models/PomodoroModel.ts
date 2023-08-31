@@ -2,6 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
 
 export interface PomodoroAttributes extends Model {
+	id: number;
 	end_date: Date;
 	counting: boolean;
 	duration: number;
