@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { UserAttributes } from '../models/UserModel';
+import { PomodoroAttributes } from '../models/PomodoroModel';
 
 dotenv.config();
 
@@ -26,6 +27,17 @@ export const usersTransform = (items: UserAttributes[]) => {
 			id: user.id,
 			username: user.username,
 			email: user.email,
+			pomodoro: !!user?.pomodoro ? pomodoroTransform(user.pomodoro) : null,
 		};
 	});
+};
+
+export const pomodoroTransform = (item: PomodoroAttributes) => {
+	return {
+		end_date: item.end_date,
+		counting: item.counting,
+		duration: item.duration,
+		remaining: item.remaining,
+		state: item.state,
+	};
 };

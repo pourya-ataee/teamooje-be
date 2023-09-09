@@ -8,7 +8,8 @@ export interface UserAttributes extends Model {
 	username: string;
 	email: string;
 	password: string;
-    pomodoro: PomodoroAttributes;
+	pomodoro: PomodoroAttributes;
+	getPomodoro: () => Promise<PomodoroAttributes>;
 }
 
 const User = sequelize.define<UserAttributes>(

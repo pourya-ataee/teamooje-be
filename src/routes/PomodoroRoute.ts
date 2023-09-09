@@ -1,7 +1,8 @@
 import express from 'express';
-import { changeStatus } from '../controllers/PomodoroController';
+import { changeStatus, getStatus } from '../controllers/PomodoroController';
 
 const router = express.Router();
 router.post('/status', changeStatus);
+router.get('/status', getStatus);
 
 export default router;

@@ -3,7 +3,7 @@ import db from '../models';
 import { errObj, resModel } from '../utils/utils';
 import { TeamAttributes } from '../models/TeamModel';
 import { UserAttributes } from '../models/UserModel';
-import { userTransform, usersTransform } from '../transforms/UserTransform';
+import { userTransform, usersTransform } from '../transforms';
 
 export const createTeam = async (req: Request, res: Response) => {
 	try {

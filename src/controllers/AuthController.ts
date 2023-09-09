@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import db from '../models';
 import { errObj, resModel } from '../utils/utils';
-import { authTransform } from '../transforms/UserTransform';
+import { authTransform } from '../transforms';
 
 export const login = async (req: Request, res: Response) => {
 	try {

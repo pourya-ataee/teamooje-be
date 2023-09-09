@@ -1,5 +1,4 @@
 export const errObj = (sequelizeError: any) => {
-	console.log(sequelizeError);
 	const errObj: { [key: string]: string } = {};
 	if (!!sequelizeError.errors) {
 		sequelizeError?.errors?.map((e: any) => {
