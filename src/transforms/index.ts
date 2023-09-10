@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { UserAttributes } from '../models/UserModel';
 import { PomodoroAttributes } from '../models/PomodoroModel';
+import { TeamAttributes } from '../models/TeamModel';
 
 dotenv.config();
 
@@ -34,10 +35,20 @@ export const usersTransform = (items: UserAttributes[]) => {
 
 export const pomodoroTransform = (item: PomodoroAttributes) => {
 	return {
-		end_date: item.end_date,
 		counting: item.counting,
 		duration: item.duration,
 		remaining: item.remaining,
 		state: item.state,
 	};
 };
+
+export const teamsTransform = (items: TeamAttributes[]) => {
+    return items.map((team) => {
+        return {
+            id: team.id,
+            name: team.name,
+            description: team.description,
+            admin: userTransform(team.admin)
+        }
+    })
+}

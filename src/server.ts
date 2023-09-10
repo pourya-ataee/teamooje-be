@@ -5,6 +5,7 @@ import db from './models';
 import testRoute from './routes/TestRoute';
 import authRoute from './routes/AuthRoute';
 import teamRoute from './routes/TeamRoute';
+import userRoute from './routes/UserRoute';
 import pomodoroRoute from './routes/PomodoroRoute';
 import { authMiddleware } from './middleware/Authentication';
 
@@ -17,6 +18,7 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
 app.use('/api', testRoute);
 app.use('/api/auth', authRoute);
+app.use('/api/user', authMiddleware, userRoute);
 app.use('/api/team', authMiddleware, teamRoute);
 app.use('/api/pomodoro', authMiddleware, pomodoroRoute);
 

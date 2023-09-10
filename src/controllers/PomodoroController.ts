@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import db from '../models';
 import { errObj, resModel } from '../utils/utils';
 import { UserAttributes } from '../models/UserModel';
+import { pomodoroTransform } from '../transforms';
 
 export const changeStatus = async (req: Request, res: Response) => {
 	try {
@@ -10,7 +11,7 @@ export const changeStatus = async (req: Request, res: Response) => {
 		});
 		if (!pomodoro) {
 			await db.pomodoro.create({
-				end_date: req.body.end_date,
+				// end_date: req.body.end_date,
 				counting: req.body.counting,
 				duration: req.body.duration,
 				remaining: req.body.remaining,
@@ -18,7 +19,7 @@ export const changeStatus = async (req: Request, res: Response) => {
 				user_id: req.user?.id,
 			});
 		} else {
-			pomodoro.end_date = req.body.end_date;
+			// pomodoro.end_date = req.body.end_date;
 			pomodoro.counting = req.body.counting;
 			pomodoro.duration = req.body.duration;
 			pomodoro.remaining = req.body.remaining;
@@ -55,7 +56,7 @@ export const getStatus = async (req: Request, res: Response) => {
 		return res.status(200).json(
 			resModel({
 				success: true,
-				data: pomodoro,
+				data: pomodoroTransform(pomodoro),
 			})
 		);
 	} catch (err) {

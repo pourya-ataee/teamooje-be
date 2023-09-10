@@ -2,12 +2,14 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../config';
 import bcrypt from 'bcrypt';
 import { PomodoroAttributes } from './PomodoroModel';
+import { TeamAttributes } from './TeamModel';
 
 export interface UserAttributes extends Model {
 	id: number;
 	username: string;
 	email: string;
 	password: string;
+    teams: TeamAttributes[];
 	pomodoro: PomodoroAttributes;
 	getPomodoro: () => Promise<PomodoroAttributes>;
 }

@@ -3,7 +3,7 @@ import sequelize from '../config';
 
 export interface PomodoroAttributes extends Model {
 	id: number;
-	end_date: Date;
+	// end_date: Date;
 	counting: boolean;
 	duration: number;
 	remaining: number;
@@ -14,10 +14,10 @@ export interface PomodoroAttributes extends Model {
 const Pomodoro = sequelize.define<PomodoroAttributes>(
 	'Pomodoro',
 	{
-		end_date: {
-			type: DataTypes.DATE,
-			allowNull: false,
-		},
+		// end_date: {
+		// 	type: DataTypes.DATE,
+		// 	allowNull: false,
+		// },
 		counting: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
