@@ -7,7 +7,10 @@ import authRoute from './routes/AuthRoute';
 import teamRoute from './routes/TeamRoute';
 import userRoute from './routes/UserRoute';
 import pomodoroRoute from './routes/PomodoroRoute';
-import { authMiddleware } from './middleware/Authentication';
+import { Server } from 'socket.io';
+import { createServer } from 'http';
+import { authMiddleware, socketAuthMiddleware } from './middleware/Authentication';
+import { connection } from './controllers/socketController';
 
 dotenv.config();
 const app = express();
@@ -24,11 +27,15 @@ app.use('/api/pomodoro', authMiddleware, pomodoroRoute);
 
 const PORT = process.env.NODE_PUBLIC_PORT;
 
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+io.use(socketAuthMiddleware).on('connection', connection);
+
 db.sequelize
 	.sync()
 	.then(() => {
 		console.log('Synced db.');
-		app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+		httpServer.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 	})
 	.catch((err) => {
 		console.log('Failed to sync db: ' + err.message);

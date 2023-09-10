@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
-import { resModel } from '../utils/utils';
 import db from '../models';
+import dotenv from 'dotenv';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Socket } from 'socket.io';
+import { resModel } from '../utils/utils';
 import { UserAttributes } from '../models/UserModel';
+import { ExtendedError } from 'socket.io/dist/namespace';
 
 dotenv.config();
 
@@ -37,5 +39,23 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 				error: 'اجازه دسترسی به این بخش را ندارید',
 			})
 		);
+	}
+};
+
+export interface ISocket extends Socket {
+	decoded?: string | JwtPayload;
+}
+
+export const socketAuthMiddleware = (socket: ISocket, next: (err?: ExtendedError | undefined) => void) => {
+	if (socket.handshake.query && socket.handshake.query.token) {
+		jwt.verify(socket.handshake.query.token as string, process.env.NODE_PRIVATE_SECRET as string, async (err, decoded) => {
+			if (err) return next(new Error('Authentication error'));
+			const user = await db.user.findOne({ where: { id: (decoded as { userId: number }).userId } });
+			if (!user) return next(new Error('Authentication error'));
+			socket.decoded = decoded;
+			next();
+		});
+	} else {
+		next(new Error('Authentication error'));
 	}
 };
