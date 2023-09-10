@@ -5,7 +5,9 @@
 	"main": "server.ts",
 	"scripts": {
 		"start": "ts-node ./src/server.ts",
-		"build": "tsc"
+		"build": "npm run create && tsc",
+		"create": "cp .env.example .env",
+		"pm2": "pm2 start npm --start --name \"teamoooje\" "
 	},
 	"author": "Pourya-Ataee",
 	"license": "MIT",
