@@ -5,13 +5,10 @@ import { Server } from "socket.io";
 import { createServer } from "http";
 import { MONGO_URI } from "./config";
 import cookieParser from "cookie-parser";
-import testRoute from "./routes/TestRoute";
-import authRoute from "./routes/AuthRoute";
-import teamRoute from "./routes/TeamRoute";
-import userRoute from "./routes/UserRoute";
-import pomodoroRoute from "./routes/PomodoroRoute";
+import webRoute from "./routes/api";
+import testRoute from "./routes/api/TestRoute";
 import { connection } from "./controllers/SocketController";
-import { authMiddleware, socketAuthMiddleware } from "./middleware/Authentication";
+import { socketAuthMiddleware } from "./middleware/Authentication";
 
 require("dotenv").config();
 const app = require("express")();
@@ -21,11 +18,8 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
-app.use("/api", testRoute);
-app.use("/api/auth", authRoute);
-app.use("/api/user", authMiddleware, userRoute);
-app.use("/api/team", authMiddleware, teamRoute);
-app.use("/api/pomodoro", authMiddleware, pomodoroRoute);
+app.use(webRoute);
+app.use(testRoute);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer);
