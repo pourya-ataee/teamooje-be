@@ -1,7 +1,7 @@
-import express from 'express';
-// import { getTeams } from '../controllers/UserController';
+import express from "express";
+import { fetchTeams } from "./../../../../controllers/UserController";
 
 const router = express.Router();
-// router.get('/teams', getTeams);
+router.get("/teams", fetchTeams);
 
 export default router;
