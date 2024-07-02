@@ -1,12 +1,20 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, Model, ObjectId, Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
+
+export interface IPomodoro {
+	counting: boolean;
+	duration: number;
+	remaining: number;
+	state: "work" | "rest";
+}
 
 export interface IUser extends Document {
 	email: string;
 	image?: string;
 	username: string;
 	password: string;
+	pomodoro?: IPomodoro;
 }
 
 export const UserSchema = new Schema(
@@ -35,6 +43,12 @@ export const UserSchema = new Schema(
 			required: [true, "وارد کردن نام‌کاربری الزامیست"],
 			minLength: [5, "نام کاربری باید حداقل 5 کاراکتر باشد"],
 			maxLength: [20, "نام کاربری نمی‌تواند بیشتر از 20 کاراکتر باشد"],
+		},
+		pomodoro: {
+			duration: { type: Number },
+			counting: { type: Boolean },
+			remaining: { type: Number },
+			state: { type: String, enum: ["work", "rest"] },
 		},
 	},
 	{ timestamps: true }

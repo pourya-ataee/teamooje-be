@@ -29,8 +29,6 @@ export const login = async (req: Request, res: Response) => {
 		}
 
 		bcrypt.compare(req.body.password, user.password, (err, status) => {
-			console.log(err);
-			console.log(status);
 			if (!status) {
 				return res.status(422).json(
 					resModel({
@@ -59,14 +57,12 @@ export const login = async (req: Request, res: Response) => {
 
 export const signup = async (req: Request, res: Response) => {
 	try {
-		const user = new db.user({
+		const user = await db.user.create({
 			username: req.body.username,
 			password: req.body.password,
 			email: req.body.email,
 		});
-		console.log(user);
-		const newUser = await user.save();
-		console.log(newUser);
+
 		return res.status(200).json(
 			resModel({
 				success: true,

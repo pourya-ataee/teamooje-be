@@ -1,11 +1,9 @@
-import mongoose, { Document, Model, ObjectId, Schema } from "mongoose";
-import { IUser, UserSchema } from "./UserModel";
+import { IUser } from "./UserModel";
+import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface ITeam extends Document {
-	id: number;
 	name: string;
-	admin: ObjectId;
-	users: ObjectId[];
+	admin: IUser & Document;
 	description?: string;
 }
 
@@ -14,7 +12,6 @@ export const TeamSchema = new Schema(
 		description: { type: String },
 		name: { type: String, required: true },
 		admin: { type: Schema.Types.ObjectId, ref: "user" },
-		users: [{ type: Schema.Types.ObjectId, ref: "user" }],
 	},
 	{ timestamps: true }
 );

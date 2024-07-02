@@ -91,5 +91,5 @@
 	},
 	"include": ["lib/**/*.ts"],
 	"exclude": ["node_modules"],
-	"files": ["types.d.ts"]
+	"files": ["types.d.ts", "./src/types/index.d.ts"]
 }

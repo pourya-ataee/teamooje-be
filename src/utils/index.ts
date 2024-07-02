@@ -1,9 +1,12 @@
 export const errObj = (mongooseError: any) => {
 	const errObj: { [key: string]: string } = {};
-	Object.keys(mongooseError.errors).forEach((e) => {
-		errObj[e] = mongooseError.errors[e].properties.message;
-	});
-	return errObj;
+	if (!!mongooseError?.errors) {
+		Object.keys(mongooseError.errors).forEach((e) => {
+			errObj[e] = mongooseError.errors[e].properties.message;
+		});
+		return errObj;
+	}
+	return "خطایی رخ داده است";
 };
 
 export const resModel = (props: { data?: any; success: boolean; successMessage?: string; error?: { [key: string]: string } | string }) => {

@@ -3,12 +3,12 @@ import express from "express";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import webRoute from "./routes/api";
 import { MONGO_URI } from "./config";
 import cookieParser from "cookie-parser";
-import webRoute from "./routes/api";
 import testRoute from "./routes/api/TestRoute";
-// import { connection } from "./controllers/SocketController";
-// import { socketAuthMiddleware } from "./middleware/Authentication";
+import { connection } from "./controllers/SocketController";
+import { socketAuthMiddleware } from "./middleware/Authentication";
 
 require("dotenv").config();
 const app = require("express")();
@@ -23,7 +23,7 @@ app.use(testRoute);
 
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-// io.use(socketAuthMiddleware).on("connection", connection);
+io.use(socketAuthMiddleware).on("connection", connection);
 
 mongoose
 	.connect(MONGO_URI)

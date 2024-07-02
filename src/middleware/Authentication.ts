@@ -1,7 +1,9 @@
 import db from "../models";
-import jwt from "jsonwebtoken";
 import { resModel } from "../utils";
-import { NextFunction, Request, Response } from "express";
+import { Request } from "../types";
+import { Socket } from "socket.io";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { NextFunction, Response } from "express";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -35,5 +37,23 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
 				error: "اجازه دسترسی به این بخش را ندارید",
 			})
 		);
+	}
+};
+
+export interface ISocket extends Socket {
+	decoded?: string | JwtPayload;
+}
+
+export const socketAuthMiddleware = (socket: ISocket, next: (err?: any) => void) => {
+	if (socket.handshake.query && socket.handshake.query.token) {
+		jwt.verify(socket.handshake.query.token as string, process.env.SECRET_KEY as string, async (err, decoded) => {
+			if (err) return next(new Error("Authentication error"));
+			const user = await db.user.findById(decoded);
+			if (!user) return next(new Error("Authentication error"));
+			socket.decoded = decoded;
+			next();
+		});
+	} else {
+		next(new Error("Authentication error"));
 	}
 };

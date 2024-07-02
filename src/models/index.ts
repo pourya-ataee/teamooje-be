@@ -1,11 +1,11 @@
 import TeamModel from "./TeamModel";
 import UserModel from "./UserModel";
-import UserTeamsModel from "./UserTeamsModel";
+import UserTeamModel from "./UserTeamModel";
 
 const db = {
 	user: UserModel,
 	team: TeamModel,
-	userTeams: UserTeamsModel,
+	userTeam: UserTeamModel,
 };
 
 export default db;
